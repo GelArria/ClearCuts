@@ -1,7 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
-import {router} from './routes/prueba.js';
+import {router} from './routes/video.js';
 import "dotenv/config"
 import { Video } from './model/Video.js';
 import { VideoError } from './model/errors/VideoError.js';
@@ -36,17 +36,16 @@ console.log(`Server on port ${port}`);
 
 iniciarServidorFTP();
 
-async function prueba(){
-    try {
-        let video = new Video('Video', 'mp4');
-        await video.setFrameRate();
-        await video.getFrames();
-        await video.getAudio();
-        await Video.createVideo(video);
-    } catch (error: any) {
-        console.log(error.message)
-    }
-}
+// async function prueba(){
+//     try {
+//         let video = new Video('Video', 'mp4');
+//         await video.setFrameRate();
+//         await video.getFrames();
+//         await video.getAudio();
+//         await Video.createVideo(video);
+//     } catch (error: any) {
+//         console.log(error.message)
+//     }
+// }
 
-prueba();
-
+// prueba();

@@ -35,7 +35,7 @@ export class Video{
     public async setFrameRate(){
         let path = `${BASE_URI}/${this.name}.${this.format}`;
         if (!fs.existsSync(path)) {
-            throw new VideoNotExistsError('El video no existe');
+            throw new VideoNotExistsError('El video no existe en la ruta ' + path);
         }
         let command = Ffmpeg(fs.createReadStream(path));
         this.frameRate = await this.calcularFPS(command);
@@ -47,7 +47,6 @@ export class Video{
                 if (err) {
                     reject(new VideoError('Error al obtener información del video'));
                 }
-                console.log(data);
                 let result = data.streams[0].avg_frame_rate?.split('/');
                 let numerator = result !== undefined ? parseInt(result[0]) : 0;
                 let denominator = result !== undefined ? parseInt(result[1]) : 1;
@@ -131,14 +130,18 @@ export class Video{
 
     public static async createVideo(video:Video){
 
-        await Ffmpeg()
-          .input(`${BASE_URI}/${video.getName()}/frame-%03d.png`)
-          .inputFPS(video.getFrameRate())
-          .videoCodec('libx264')
-          .input(`${BASE_URI}/${video.getName()}/${video.getName()}.aac`)
-          .audioCodec('aac')
-          .output(`${BASE_URI}/${video.getName()}/output.mp4`)
-          .run();
+        return new Promise((resolve, reject) => {
+            Ffmpeg()
+                .input(`${BASE_URI}/${video.getName()}/frame-%03d.png`)
+                .inputFPS(video.getFrameRate())
+                .videoCodec('libx264')
+                .input(`${BASE_URI}/${video.getName()}/${video.getName()}.aac`)
+                .audioCodec('aac')
+                .output(`${BASE_URI}/${video.getName()}/output.mp4`)
+                .on('end', resolve)
+                .on('error', reject)
+                .run();
+        });
         
     }
 

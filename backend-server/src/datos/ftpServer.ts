@@ -11,7 +11,7 @@ function iniciarServidorFTP(){
         pasv_min: 1025,
         pasv_max: 1040, // Passive mode port range
         greeting: 'Bienvenido al servidor ftp de la aplicación', // Welcome message
-        whitelist: ['GET', 'PASS', 'PUT', 'TYPE', 'USER', 'QUIT'], // FTP commands allowed
+        whitelist: ['EPSV', 'GET', 'PASS', 'PASV','PORT', 'PUT', 'STOR', 'TYPE', 'USER', 'QUIT'], // FTP commands allowed
     });
 
 
